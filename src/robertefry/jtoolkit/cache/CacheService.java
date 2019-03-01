@@ -4,7 +4,6 @@ package robertefry.jtoolkit.cache;
 import java.util.Iterator;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * @author Robert E Fry
@@ -31,7 +30,7 @@ public class CacheService< T > implements Cache< T > {
 			
 			while ( running ) {
 				
-				StreamSupport.stream( cache.spliterator(), true )
+				cache.stream().parallel()
 					.filter( removal::test )
 					.collect( Collectors.toSet() )
 					.forEach( cache::uncache );

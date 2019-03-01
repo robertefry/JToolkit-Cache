@@ -3,6 +3,7 @@ package robertefry.jtoolkit.cache;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 /**
  * @author Robert E Fry
@@ -89,6 +90,16 @@ public class CollectionCache< T > implements Cache< T >, Collection< T > {
 	@Override
 	public void clear() {
 		collection.clear();
+	}
+	
+	@Override
+	public Stream< T > stream() {
+		return Cache.super.stream();
+	}
+	
+	@Override
+	public Stream< T > parallelStream() {
+		return Cache.super.parallelStream();
 	}
 	
 }
