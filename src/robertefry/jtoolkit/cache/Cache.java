@@ -11,4 +11,10 @@ public interface Cache< T > extends Iterable< T > {
 	
 	public void uncache( T t );
 	
+	public int size();
+	
+	public boolean isEmpty();
+	
+	public void clear();
+	
 }

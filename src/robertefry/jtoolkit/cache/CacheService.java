@@ -61,4 +61,19 @@ public class CacheService< T > implements Cache< T > {
 		cache.uncache( t );
 	}
 	
+	@Override
+	public int size() {
+		return cache.size();
+	}
+	
+	@Override
+	public boolean isEmpty() {
+		return cache.isEmpty();
+	}
+	
+	@Override
+	public void clear() {
+		cache.clear();
+	}
+	
 }
