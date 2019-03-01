@@ -4,7 +4,6 @@ package robertefry.jtoolkit.cache;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -14,7 +13,6 @@ import java.util.function.Supplier;
 public class MapCache< K, V > implements Cache< Map.Entry< K, V > > {
 	
 	private final Map< K, V > map;
-	private Predicate< Map.Entry< K, V > > condition = ( entry ) -> false;
 	
 	public MapCache( Map< K, V > map ) {
 		this.map = map;
@@ -48,16 +46,6 @@ public class MapCache< K, V > implements Cache< Map.Entry< K, V > > {
 			cache( key, value );
 		}
 		return value;
-	}
-	
-	@Override
-	public Predicate< Entry< K, V > > getCleanCondition() {
-		return condition;
-	}
-
-	@Override
-	public void setCleanCondition( Predicate< Map.Entry< K, V > > condition ) {
-		this.condition = condition;
 	}
 	
 	@Override

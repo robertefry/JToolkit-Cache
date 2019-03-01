@@ -3,7 +3,6 @@ package robertefry.jtoolkit.cache;
 
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.function.Predicate;
 
 /**
  * @author Robert E Fry
@@ -12,7 +11,6 @@ import java.util.function.Predicate;
 public class CollectionCache< T > implements Cache< T > {
 	
 	private final Collection< T > collection;
-	private Predicate< T > condition = ( entry ) -> false;
 	
 	public CollectionCache( Collection< T > collection ) {
 		this.collection = collection;
@@ -26,16 +24,6 @@ public class CollectionCache< T > implements Cache< T > {
 	@Override
 	public void remove( T t ) {
 		collection.remove( t );
-	}
-	
-	@Override
-	public Predicate< T > getCleanCondition() {
-		return condition;
-	}
-	
-	@Override
-	public void setCleanCondition( Predicate< T > condition ) {
-		this.condition = condition;
 	}
 	
 	@Override

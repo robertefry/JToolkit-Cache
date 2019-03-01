@@ -22,13 +22,9 @@ public interface Cache< T > extends Iterable< T > {
 	
 	public void clear();
 	
-	public Predicate< T > getCleanCondition();
-	
-	public void setCleanCondition( Predicate< T > condition );
-	
-	default void clean() {
+	default void clean( Predicate< T > condition ) {
 		stream().parallel()
-			.filter( elem -> getCleanCondition().test( elem ) )
+			.filter( condition::test )
 			.collect( Collectors.toSet() )
 			.forEach( this::remove );
 	}
