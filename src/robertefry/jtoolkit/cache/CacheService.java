@@ -45,6 +45,10 @@ public class CacheService< T > implements Cache< T > {
 		this.removal = removal;
 	}
 	
+	public Cache< T > back() {
+		return cache;
+	}
+	
 	@Override
 	public Iterator< T > iterator() {
 		return cache.iterator();
