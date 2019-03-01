@@ -24,6 +24,8 @@ public interface Cache< T > extends Iterable< T > {
 	
 	public Predicate< T > getCleanCondition();
 	
+	public void setCleanCondition( Predicate< T > condition );
+	
 	default void clean() {
 		stream().parallel()
 			.filter( elem -> getCleanCondition().test( elem ) )

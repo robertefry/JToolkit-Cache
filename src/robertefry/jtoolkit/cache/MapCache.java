@@ -14,15 +14,10 @@ import java.util.function.Supplier;
 public class MapCache< K, V > implements Cache< Map.Entry< K, V > > {
 	
 	private final Map< K, V > map;
-	private final Predicate< Map.Entry< K, V > > clean;
+	private Predicate< Map.Entry< K, V > > condition = ( entry ) -> false;
 	
 	public MapCache( Map< K, V > map ) {
-		this( map, ( entry ) -> false );
-	}
-	
-	public MapCache( Map< K, V > map, Predicate< Map.Entry< K, V > > cleanCondition ) {
 		this.map = map;
-		this.clean = cleanCondition;
 	}
 	
 	public void cache( K key, V value ) {
@@ -54,10 +49,15 @@ public class MapCache< K, V > implements Cache< Map.Entry< K, V > > {
 		}
 		return value;
 	}
-
+	
 	@Override
 	public Predicate< Entry< K, V > > getCleanCondition() {
-		return clean;
+		return condition;
+	}
+
+	@Override
+	public void setCleanCondition( Predicate< Map.Entry< K, V > > condition ) {
+		this.condition = condition;
 	}
 	
 	@Override

@@ -12,15 +12,10 @@ import java.util.function.Predicate;
 public class CollectionCache< T > implements Cache< T > {
 	
 	private final Collection< T > collection;
-	private final Predicate< T > clean;
+	private Predicate< T > condition = ( entry ) -> false;
 	
 	public CollectionCache( Collection< T > collection ) {
-		this( collection, ( entry ) -> false );
-	}
-	
-	public CollectionCache( Collection< T > collection, Predicate< T > cleanCondition ) {
 		this.collection = collection;
-		this.clean = cleanCondition;
 	}
 	
 	@Override
@@ -35,7 +30,12 @@ public class CollectionCache< T > implements Cache< T > {
 	
 	@Override
 	public Predicate< T > getCleanCondition() {
-		return clean;
+		return condition;
+	}
+	
+	@Override
+	public void setCleanCondition( Predicate< T > condition ) {
+		this.condition = condition;
 	}
 	
 	@Override
