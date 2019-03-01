@@ -1,6 +1,8 @@
 
 package robertefry.jtoolkit.cache;
 
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -12,13 +14,22 @@ public interface Cache< T > extends Iterable< T > {
 	
 	public void cache( T t );
 	
-	public void uncache( T t );
+	public void remove( T t );
 	
 	public int size();
 	
 	public boolean isEmpty();
 	
 	public void clear();
+	
+	public Predicate< T > getCleanCondition();
+	
+	default void clean() {
+		stream().parallel()
+			.filter( elem -> getCleanCondition().test( elem ) )
+			.collect( Collectors.toSet() )
+			.forEach( this::remove );
+	}
 	
 	default Stream< T > stream() {
 		return StreamSupport.stream( spliterator(), false );

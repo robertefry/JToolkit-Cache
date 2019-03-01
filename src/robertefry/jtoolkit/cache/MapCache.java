@@ -1,38 +1,45 @@
 
 package robertefry.jtoolkit.cache;
 
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
  * @author Robert E Fry
  * @date 1 Mar 2019
  */
-public class MapCache< K, V > implements Cache< Map.Entry< K, V > >, Map< K, V > {
+public class MapCache< K, V > implements Cache< Map.Entry< K, V > > {
 	
 	private final Map< K, V > map;
+	private final Predicate< Map.Entry< K, V > > clean;
 	
 	public MapCache( Map< K, V > map ) {
+		this( map, ( entry ) -> false );
+	}
+	
+	public MapCache( Map< K, V > map, Predicate< Map.Entry< K, V > > cleanCondition ) {
 		this.map = map;
-	}
-	
-	@Override
-	public void cache( Map.Entry< K, V > entry ) {
-		map.put( entry.getKey(), entry.getValue() );
-	}
-	
-	public void uncache( Map.Entry< K, V > entry ) {
-		map.remove( entry.getKey(), entry.getValue() );
+		this.clean = cleanCondition;
 	}
 	
 	public void cache( K key, V value ) {
 		map.put( key, value );
 	}
 	
-	public V retrieve( K key ) throws CacheElementNotPresentException {
+	@Override
+	public void cache( Map.Entry< K, V > entry ) {
+		cache( entry.getKey(), entry.getValue() );
+	}
+	
+	@Override
+	public void remove( Entry< K, V > entry ) {
+		map.remove( entry.getKey() );
+	}
+	
+	public V retireve( K key ) throws CacheElementNotPresentException {
 		if ( !map.containsKey( key ) ) throw new CacheElementNotPresentException();
 		return map.get( key );
 	}
@@ -47,10 +54,10 @@ public class MapCache< K, V > implements Cache< Map.Entry< K, V > >, Map< K, V >
 		}
 		return value;
 	}
-	
+
 	@Override
-	public Iterator< Entry< K, V > > iterator() {
-		return map.entrySet().iterator();
+	public Predicate< Entry< K, V > > getCleanCondition() {
+		return clean;
 	}
 	
 	@Override
@@ -64,53 +71,13 @@ public class MapCache< K, V > implements Cache< Map.Entry< K, V > >, Map< K, V >
 	}
 	
 	@Override
-	public boolean containsKey( Object key ) {
-		return map.containsKey( key );
-	}
-	
-	@Override
-	public boolean containsValue( Object value ) {
-		return map.containsValue( value );
-	}
-	
-	@Override
-	public V get( Object key ) {
-		return map.get( key );
-	}
-	
-	@Override
-	public V put( K key, V value ) {
-		return map.put( key, value );
-	}
-	
-	@Override
-	public V remove( Object key ) {
-		return map.remove( key );
-	}
-	
-	@Override
-	public void putAll( Map< ? extends K, ? extends V > m ) {
-		map.putAll( m );
-	}
-	
-	@Override
 	public void clear() {
 		map.clear();
 	}
 	
 	@Override
-	public Set< K > keySet() {
-		return map.keySet();
-	}
-	
-	@Override
-	public Collection< V > values() {
-		return map.values();
-	}
-	
-	@Override
-	public Set< Entry< K, V > > entrySet() {
-		return map.entrySet();
+	public Iterator< Entry< K, V > > iterator() {
+		return map.entrySet().iterator();
 	}
 	
 }
